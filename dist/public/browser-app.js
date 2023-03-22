@@ -8,7 +8,7 @@ const showTasks = async () => {
   loadingDOM.style.visibility = "visible";
   try {
     const {
-      data: { tasks },
+      data: { tasks: tasks },
     } = await axios.get("/api/v1/tasks");
     if (tasks.length < 1) {
       tasksDOM.innerHTML = '<h5 class="empty-list">No tasks in your list</h5>';
@@ -21,8 +21,6 @@ const showTasks = async () => {
         return `<div class="single-task ${completed && "task-completed"}">
 <h5><span><i class="far fa-check-circle"></i></span>${name}</h5>
 <div class="task-links">
-
-
 
 <!-- edit link -->
 <a href="task.html?id=${taskID}"  class="edit-link">

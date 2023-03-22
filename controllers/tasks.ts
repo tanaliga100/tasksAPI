@@ -4,10 +4,8 @@ import Task from "../models/task.schema";
 
 const getAllTasks = async (req: Request, res: Response) => {
   try {
-    const allTasks = await Task.find({});
-    res
-      .status(200)
-      .json({ status: "All Tasks", length: allTasks.length, allTasks });
+    const tasks = await Task.find({});
+    res.status(200).json({ status: "All Tasks", length: tasks.length, tasks });
   } catch (error) {}
 };
 

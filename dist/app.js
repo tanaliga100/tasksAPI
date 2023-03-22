@@ -48,7 +48,7 @@ var tasks_1 = require("./routers/tasks");
 dotenv_1.default.config();
 var app = (0, express_1.default)();
 var port = process.env.PORT || 5000;
-app.use(express_1.default.static(path_1.default.join(__dirname, "/public")));
+app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)("tiny"));
 app.use("/api/v1/tasks", tasks_1.tasksRoute);

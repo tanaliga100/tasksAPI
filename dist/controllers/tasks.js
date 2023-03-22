@@ -42,17 +42,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateTask = exports.getTask = exports.getAllTasks = exports.deleteTask = exports.createTask = void 0;
 var task_schema_1 = __importDefault(require("../models/task.schema"));
 var getAllTasks = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var allTasks, error_1;
+    var tasks, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, task_schema_1.default.find({})];
             case 1:
-                allTasks = _a.sent();
-                res
-                    .status(200)
-                    .json({ status: "All Tasks", length: allTasks.length, allTasks: allTasks });
+                tasks = _a.sent();
+                res.status(200).json({ status: "All Tasks", length: tasks.length, tasks: tasks });
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
