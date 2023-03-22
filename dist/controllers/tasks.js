@@ -35,84 +35,129 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateTask = exports.getTask = exports.getAllTasks = exports.deleteTask = exports.createTask = void 0;
-var Tasks = [];
+var task_schema_1 = __importDefault(require("../models/task.schema"));
 var getAllTasks = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var allTasks, error_1;
     return __generator(this, function (_a) {
-        res.json(Tasks);
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, task_schema_1.default.find({})];
+            case 1:
+                allTasks = _a.sent();
+                res
+                    .status(200)
+                    .json({ status: "All Tasks", length: allTasks.length, allTasks: allTasks });
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
     });
 }); };
 exports.getAllTasks = getAllTasks;
 var createTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, title, description, newTask;
-    return __generator(this, function (_b) {
-        _a = req.body, title = _a.title, description = _a.description;
-        if (!title || !description) {
-            return [2 /*return*/, res
-                    .status(400)
-                    .json({ msg: "Title and description must be provided" })];
+    var task, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, task_schema_1.default.create(req.body)];
+            case 1:
+                task = _a.sent();
+                res.status(201).json(task);
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                res.status(500).json({ msg: error_2 });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
-        else {
-            newTask = {
-                id: String(Math.floor(Math.random() * 20 + 100)),
-                title: title,
-                description: description,
-                completed: false,
-            };
-            Tasks.push(newTask);
-        }
-        res.status(200).json({ msg: "TASK CREATED", Tasks: Tasks });
-        return [2 /*return*/];
     });
 }); };
 exports.createTask = createTask;
 var getTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task;
+    var taskId, task, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                _a.trys.push([0, 2, , 3]);
                 taskId = req.params.id;
-                return [4 /*yield*/, Tasks.find(function (task) { return task.id === taskId; })];
+                return [4 /*yield*/, task_schema_1.default.findOne({ _id: taskId })];
             case 1:
                 task = _a.sent();
-                if (!taskId) {
-                    return [2 /*return*/, res.status(404).json({ msg: "Task not found" })];
+                if (!task) {
+                    return [2 /*return*/, res.status(404).json({ msg: "NO Task with id " + taskId })];
                 }
-                else {
-                    res.json({ msg: "SINGLE TASK", task: task });
-                }
-                return [2 /*return*/];
+                res.status(200).json({ msg: "Single Task", task: task });
+                return [3 /*break*/, 3];
+            case 2:
+                error_3 = _a.sent();
+                res.status(404).json({ msg: error_3 });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 exports.getTask = getTask;
 var deleteTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task, updatedTask;
+    var taskId, task, newTask, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                _a.trys.push([0, 3, , 4]);
                 taskId = req.params.id;
-                return [4 /*yield*/, Tasks.findIndex(function (t) { return t.id === taskId; })];
+                return [4 /*yield*/, task_schema_1.default.findOneAndDelete({ _id: taskId })];
             case 1:
                 task = _a.sent();
-                if (!(task === -1)) return [3 /*break*/, 2];
-                return [2 /*return*/, res.status(404).json({ msg: "Task not found" })];
-            case 2: return [4 /*yield*/, Tasks.splice(task, 1)[0]];
+                if (!task) {
+                    return [2 /*return*/, res.status(404).json({ msg: "No Task with ID: " + taskId })];
+                }
+                return [4 /*yield*/, task_schema_1.default.find({})];
+            case 2:
+                newTask = _a.sent();
+                res.status(200).json({ msg: "Task Deleted successfully", newTask: newTask });
+                return [3 /*break*/, 4];
             case 3:
-                updatedTask = _a.sent();
-                res.status(200).json({ msg: "TASK DELETED", updatedTask: updatedTask });
-                _a.label = 4;
+                error_4 = _a.sent();
+                res.status(404).json({ msg: error_4 });
+                return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.deleteTask = deleteTask;
 var updateTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var taskId, task, error_5;
     return __generator(this, function (_a) {
-        res.send("Update Task");
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                taskId = req.params.id;
+                return [4 /*yield*/, task_schema_1.default.findOneAndUpdate({ _id: taskId }, req.body, {
+                        new: true,
+                        runValidators: true,
+                    })];
+            case 1:
+                task = _a.sent();
+                if (!task) {
+                    return [2 /*return*/, res.status(404).json({ msg: "No Task with ID: " + taskId })];
+                }
+                res.status(200).json({ msg: "Task Updated", task: task });
+                return [3 /*break*/, 3];
+            case 2:
+                error_5 = _a.sent();
+                res.status(404).json({ msg: error_5 });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
     });
 }); };
 exports.updateTask = updateTask;
+var Tasks = [];

@@ -1,0 +1,6 @@
+// app.get("/", (req: Request, res: Response) => {
+//   res.json({ msg: "Server Alive" });
+// });
+// app.get("/", (req: Request, res: Response) => {
+//   res.sendFile(path.join(__dirname, "dist/public", "index.html"));
+// });
