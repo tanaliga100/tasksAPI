@@ -10,66 +10,11 @@ body {
   font-family: "Poppins", sans;
 }
 .title {
-  background: rgb(0, 0, 0);
-  color: white;
-  padding: 1rem;
-  cursor: pointer;
-}
-.second-word {
-  color: rgba(0, 0, 255, 0.828);
-}
-
-.task-form {
-  padding: 2rem;
-  color: white;
-  margin: auto;
-  max-width: 60%;
-  color: red;
-}
-.form-control {
-  padding: 1rem;
-  display: flex;
-  justify-content: space-around;
-}
-.task-input {
-  padding: 5px;
-}
-.btn {
-  padding: 10px;
+  width: 100%;
   background-color: black;
   color: white;
-  border: none;
-  border-radius: 5px;
+  padding: 0.3rem 1rem;
 }
-.loading-text {
-  max-width: 60%;
-  margin: auto;
-}
-.tasks-container {
-  max-width: 60%;
-  margin: auto;
-}
-.tasks {
-  display: grid;
-  align-items: center;
-  width: auto;
-  flex-grow: 1;
-  gap: 0.5rem;
-}
-.single-task {
-  display: flex;
-  justify-content: space-between;
-  flex-grow: 1;
-  width: auto;
-}
-.far {
-  margin: 0 1rem;
-}
-.edit-link {
-  margin: 0 1rem;
-  cursor: pointer;
-}
-.delete-btn {
-  margin: 0 1rem;
-  cursor: pointer;
+.second-word {
+  color: blue;
 }

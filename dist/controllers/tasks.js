@@ -40,73 +40,62 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateTask = exports.getTask = exports.getAllTasks = exports.deleteTask = exports.createTask = void 0;
+var async_1 = __importDefault(require("../middlewares/async"));
 var task_schema_1 = __importDefault(require("../models/task.schema"));
-var getAllTasks = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var tasks, error_1;
+var getAllTasks = (0, async_1.default)(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var tasks;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, task_schema_1.default.find({})];
+            case 0: return [4 /*yield*/, task_schema_1.default.find({})];
             case 1:
                 tasks = _a.sent();
                 res.status(200).json({ status: "All Tasks", length: tasks.length, tasks: tasks });
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                res.status(500).json({ msg: error_1 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [2 /*return*/];
         }
     });
-}); };
+}); });
 exports.getAllTasks = getAllTasks;
-var createTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var task, error_2;
+var createTask = (0, async_1.default)(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var task;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, task_schema_1.default.create(req.body)];
+            case 0: return [4 /*yield*/, task_schema_1.default.create(req.body)];
             case 1:
                 task = _a.sent();
                 res.status(201).json(task);
-                return [3 /*break*/, 3];
-            case 2:
-                error_2 = _a.sent();
-                res.status(500).json({ msg: error_2 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [2 /*return*/];
         }
     });
-}); };
+}); });
 exports.createTask = createTask;
-var getTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task, error_3;
+var getTask = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var taskId, task, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
                 taskId = req.params.id;
-                return [4 /*yield*/, task_schema_1.default.findOne({ _id: taskId })];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, task_schema_1.default.findOne({ _id: taskId })];
+            case 2:
                 task = _a.sent();
                 if (!task) {
-                    return [2 /*return*/, res.status(404).json({ msg: "NO Task with id " + taskId })];
+                    return [2 /*return*/, res.status(404).json({ msg: "No task found with ID :" + taskId })];
                 }
                 res.status(200).json({ msg: "Single Task", task: task });
-                return [3 /*break*/, 3];
-            case 2:
-                error_3 = _a.sent();
-                res.status(404).json({ msg: error_3 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                res.status(404).json({ eRR: error_1 === null || error_1 === void 0 ? void 0 : error_1.message });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.getTask = getTask;
 var deleteTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task, newTask, error_4;
+    var taskId, task, newTask, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -124,8 +113,8 @@ var deleteTask = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.status(200).json({ msg: "Task Deleted successfully", newTask: newTask });
                 return [3 /*break*/, 4];
             case 3:
-                error_4 = _a.sent();
-                res.status(404).json({ msg: error_4 });
+                error_2 = _a.sent();
+                res.status(404).json({ msg: error_2 });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -133,7 +122,7 @@ var deleteTask = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 exports.deleteTask = deleteTask;
 var updateTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task, error_5;
+    var taskId, task, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -151,8 +140,8 @@ var updateTask = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.status(200).json({ msg: "Task Updated", task: task });
                 return [3 /*break*/, 3];
             case 2:
-                error_5 = _a.sent();
-                res.status(404).json({ msg: error_5 });
+                error_3 = _a.sent();
+                res.status(404).json({ msg: error_3 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -160,3 +149,7 @@ var updateTask = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 exports.updateTask = updateTask;
 var Tasks = [];
+// this will trigger an error if exact length but not exact value
+// return res.status(500).json({ msg: "Exact Id but not exact value" });
+// return next(createCustomError("Exact Id but not exact value", 404));
+// return next("has error");

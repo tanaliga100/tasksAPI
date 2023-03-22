@@ -1,36 +1,39 @@
-import express, { Express, Request, Response } from "express";
+import express, {
+  ErrorRequestHandler,
+  Express,
+  NextFunction,
+  Request,
+  Response,
+} from "express";
 import ITask from "../interfaces/tasks.model";
+import asyncWrapper from "../middlewares/async";
+// import HTTPError from "../middlewares/errorHandler";
+import { Error } from "mongoose";
+import CustomAPIError, { createCustomError } from "../errors/customError";
 import Task from "../models/task.schema";
 
-const getAllTasks = async (req: Request, res: Response) => {
-  try {
+const getAllTasks = asyncWrapper(
+  async (req: Request, res: Response): Promise<void> => {
     const tasks = await Task.find({});
     res.status(200).json({ status: "All Tasks", length: tasks.length, tasks });
-  } catch (error) {
-    res.status(500).json({ msg: error });
   }
-};
+);
 
-const createTask = async (req: Request, res: Response) => {
-  try {
-    const task = await Task.create(req.body);
-    res.status(201).json(task);
-  } catch (error: unknown) {
-    res.status(500).json({ msg: error });
-  }
-};
+const createTask = asyncWrapper(async (req: Request, res: Response) => {
+  const task = await Task.create(req.body);
+  res.status(201).json(task);
+});
 
-const getTask = async (req: Request, res: Response) => {
+const getTask = async (req: Request, res: Response, next: NextFunction) => {
+  const { id: taskId } = req.params;
   try {
-    const { id: taskId } = req.params;
     const task = await Task.findOne({ _id: taskId });
     if (!task) {
-      return res.status(404).json({ msg: "NO Task with id " + taskId });
+      return res.status(404).json({ msg: "No task found with ID :" + taskId });
     }
-
     res.status(200).json({ msg: "Single Task", task });
-  } catch (error) {
-    res.status(404).json({ msg: error });
+  } catch (error: any) {
+    res.status(404).json({ eRR: error?.message });
   }
 };
 
@@ -65,3 +68,8 @@ const updateTask = async (req: Request, res: Response) => {
 export { createTask, deleteTask, getAllTasks, getTask, updateTask };
 
 let Tasks: ITask[] = [];
+
+// this will trigger an error if exact length but not exact value
+// return res.status(500).json({ msg: "Exact Id but not exact value" });
+// return next(createCustomError("Exact Id but not exact value", 404));
+// return next("has error");
