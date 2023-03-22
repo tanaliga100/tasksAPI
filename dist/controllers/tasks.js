@@ -54,6 +54,7 @@ var getAllTasks = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
+                res.status(500).json({ msg: error_1 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
