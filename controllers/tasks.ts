@@ -28,12 +28,9 @@ const getTask = asyncMiddleware(
     const { id: taskId } = req.params;
     const task = await Task.findOne({ _id: taskId });
     if (!task) {
-      let error = new CustomAPIError(
-        404,
-        "No associated task with id :" + taskId
+      return next(
+        new CustomAPIError(404, `No associated task with id : ${taskId}`)
       );
-      return next(error);
-      // return next(new CustomAPIError(404, "No associated task " + taskId));
     }
     res.status(200).json({ msg: "Single Task", task });
   }

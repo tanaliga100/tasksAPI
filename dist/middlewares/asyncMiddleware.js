@@ -58,8 +58,9 @@ var asyncMiddleware = function (fn) {
 };
 exports.default = asyncMiddleware;
 // import { NextFunction, Request, Response } from "express";
+// import CustomAPIError from "../errors/customError";
 // const asyncMiddleware =
-//   (fn: any) => (req: Request, res: Response, next: NextFunction) => {
+//   (fn: any) => (req: Request, res: Response, next: any) => {
 //     Promise.resolve(fn(req, res, next)).catch(next);
 //   };
 // export default asyncMiddleware;

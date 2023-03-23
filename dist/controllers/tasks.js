@@ -71,7 +71,7 @@ var createTask = (0, asyncMiddleware_1.default)(function (req, res) { return __a
 }); });
 exports.createTask = createTask;
 var getTask = (0, asyncMiddleware_1.default)(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task, error;
+    var taskId, task;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -80,9 +80,7 @@ var getTask = (0, asyncMiddleware_1.default)(function (req, res, next) { return 
             case 1:
                 task = _a.sent();
                 if (!task) {
-                    error = new customError_1.default(404, "No associated task with id :" + taskId);
-                    return [2 /*return*/, next(error)];
-                    // return next(new CustomAPIError(404, "No associated task " + taskId));
+                    return [2 /*return*/, next(new customError_1.default(404, "No associated task with id : ".concat(taskId)))];
                 }
                 res.status(200).json({ msg: "Single Task", task: task });
                 return [2 /*return*/];

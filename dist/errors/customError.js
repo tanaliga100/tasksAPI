@@ -20,6 +20,7 @@ var CustomAPIError = /** @class */ (function (_super) {
     function CustomAPIError(status, message) {
         var _this = _super.call(this, message) || this;
         _this.status = status;
+        _this.message = message;
         return _this;
     }
     return CustomAPIError;

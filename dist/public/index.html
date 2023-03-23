@@ -21,19 +21,22 @@
     <form class="task-form">
       <h2 class="title">task <span class="second-word">manager</span></h2>
       <div class="form-control">
-        <input
-          type="text"
-          name="name"
-          class="task-input"
-          placeholder="e.g. learn what..."
-        />
-        <button type="submit" class="btn submit-btn">submit</button>
+        <div class="content">
+          <input
+            type="text"
+            name="name"
+            class="task-input"
+            placeholder="e.g. learn what..."
+          />
+          <button type="submit" class="btn submit-btn">submit</button>
+        </div>
       </div>
       <div class="form-alert"></div>
     </form>
     <section class="tasks-container">
-      <p class="loading-text">Loading...</p>
-      <div class="tasks"></div>
+      <div class="tasks">
+        <p class="loading-text">Loading...</p>
+      </div>
     </section>
     <!-- axios -->
     <script

@@ -3,6 +3,7 @@
 * {
   margin: 0;
   padding: 0;
+  width: auto;
 }
 html,
 body {
@@ -10,11 +11,51 @@ body {
   font-family: "Poppins", sans;
 }
 .title {
-  width: 100%;
+  width: auto;
   background-color: black;
   color: white;
-  padding: 0.3rem 1rem;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  margin: auto;
 }
 .second-word {
   color: blue;
+}
+.task-form {
+  width: auto;
+  text-align: center;
+}
+.form-control {
+  background-color: whitesmoke;
+  color: white;
+  width: 100%;
+}
+.content {
+  justify-content: center;
+  margin: auto;
+  padding: 1rem;
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+}
+.task-input,
+.submit-btn {
+  padding: 0.3rem 0.5rem;
+  margin: 10px;
+}
+.tasks-container {
+  width: 80%;
+  margin: auto;
+}
+.tasks {
+  background-color: whitesmoke;
+}
+.single-task {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.7rem 0;
+}
+.fa-edit,
+.fa-trash {
+  border: none;
 }

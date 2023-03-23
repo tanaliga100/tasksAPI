@@ -1,4 +1,6 @@
+import { log } from "console";
 import { NextFunction, Request, Response } from "express";
+
 const asyncMiddleware = (fn: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -11,9 +13,10 @@ const asyncMiddleware = (fn: any) => {
 
 export default asyncMiddleware;
 // import { NextFunction, Request, Response } from "express";
+// import CustomAPIError from "../errors/customError";
 
 // const asyncMiddleware =
-//   (fn: any) => (req: Request, res: Response, next: NextFunction) => {
+//   (fn: any) => (req: Request, res: Response, next: any) => {
 //     Promise.resolve(fn(req, res, next)).catch(next);
 //   };
 
