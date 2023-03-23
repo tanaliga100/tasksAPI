@@ -42,9 +42,7 @@ const showTasks = async () => {
   }
   loadingDOM.style.visibility = "hidden";
 };
-
 showTasks();
-
 // delete task /api/tasks/:id
 
 tasksDOM.addEventListener("click", async (e) => {
@@ -61,7 +59,6 @@ tasksDOM.addEventListener("click", async (e) => {
   }
   loadingDOM.style.visibility = "hidden";
 });
-
 // form
 
 formDOM.addEventListener("submit", async (e) => {

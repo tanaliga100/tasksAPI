@@ -14,22 +14,22 @@
     <!-- normalize css -->
     <!-- <link rel="stylesheet" href="./normalize.css" /> -->
     <!-- main css -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./main.css" />
     <title>Task Manager || Final</title>
   </head>
   <body>
+    <h2 class="title">task manager</h2>
     <form class="task-form">
-      <h2 class="title">task <span class="second-word">manager</span></h2>
+      <h4 class="sub-title">Add Task</h4>
       <div class="form-control">
-        <div class="content">
-          <input
-            type="text"
-            name="name"
-            class="task-input"
-            placeholder="e.g. learn what..."
-          />
-          <button type="submit" class="btn submit-btn">submit</button>
-        </div>
+        <input
+          type="text"
+          name="name"
+          class="task-input"
+          placeholder="e.g. learn what..."
+        />
+        <button type="submit" class="btn submit-btn">submit</button>
       </div>
       <div class="form-alert"></div>
     </form>
