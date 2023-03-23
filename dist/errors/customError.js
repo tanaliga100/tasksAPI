@@ -15,10 +15,9 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCustomError = void 0;
 var CustomAPIError = /** @class */ (function (_super) {
     __extends(CustomAPIError, _super);
-    function CustomAPIError(message, status) {
+    function CustomAPIError(status, message) {
         var _this = _super.call(this, message) || this;
         _this.status = status;
         return _this;
@@ -26,7 +25,6 @@ var CustomAPIError = /** @class */ (function (_super) {
     return CustomAPIError;
 }(Error));
 exports.default = CustomAPIError;
-var createCustomError = function (message, status) {
-    return new CustomAPIError(message, status);
-};
-exports.createCustomError = createCustomError;
+// export const createCustomError = (message: string, status: number) => {
+//   return new CustomAPIError(status, message);
+// };

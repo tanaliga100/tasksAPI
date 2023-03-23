@@ -35,58 +35,31 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var dotenv_1 = __importDefault(require("dotenv"));
-var express_1 = __importDefault(require("express"));
-var morgan_1 = __importDefault(require("morgan"));
-var path_1 = __importDefault(require("path"));
-var connect_1 = require("./config/connect");
-var customError_1 = __importDefault(require("./errors/customError"));
-var tasks_1 = require("./routers/tasks");
-dotenv_1.default.config();
-var app = (0, express_1.default)();
-var port = process.env.PORT || 5000;
-app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
-app.use(express_1.default.json());
-app.use((0, morgan_1.default)("tiny"));
-app.use("/api/v1/tasks", tasks_1.tasksRoute);
-// app.use(notFound)
-app.use(function (req, res) {
-    res.status(404).send("<small style=\"textAlign=\"center\"\">I cannot find what you are looking for</small>\n  <a href=\"/\">Go Back</a>\n  ");
-});
-// app.use(errorHandlerMiddleware);
-app.use(function (err, req, res, next) {
-    console.log(err.message);
-    console.log(err.status);
-    if (err instanceof customError_1.default) {
-        return res.status(err.status).json({ msg: err.message });
-    }
-    return res.status(500).json({ msg: "Something went wrong !", status: 500 });
-});
-var start = function (port) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, (0, connect_1.connectDB)(process.env.MONGO_URI)];
-            case 1:
-                _a.sent();
-                return [4 /*yield*/, app.listen(port, function () {
-                        return console.log("DB ESTABLISHED && LISTENING => " + port);
-                    })];
-            case 2:
-                _a.sent();
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _a.sent();
-                console.log(error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-start(port);
+var asyncMiddleware = function (fn) {
+    return function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+        var error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, fn(req, res, next)];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _a.sent();
+                    next(error_1);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); };
+};
+exports.default = asyncMiddleware;
+// import { NextFunction, Request, Response } from "express";
+// const asyncMiddleware =
+//   (fn: any) => (req: Request, res: Response, next: NextFunction) => {
+//     Promise.resolve(fn(req, res, next)).catch(next);
+//   };
+// export default asyncMiddleware;

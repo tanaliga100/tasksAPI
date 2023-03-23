@@ -1,12 +1,12 @@
 class CustomAPIError extends Error {
   status: number;
-  constructor(message: string, status: number) {
+  constructor(status: number, message: string) {
     super(message);
     this.status = status;
   }
 }
 export default CustomAPIError;
 
-export const createCustomError = (message: string, status: number) => {
-  return new CustomAPIError(message, status);
-};
+// export const createCustomError = (message: string, status: number) => {
+//   return new CustomAPIError(status, message);
+// };

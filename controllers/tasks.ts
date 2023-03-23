@@ -6,36 +6,38 @@ import express, {
   Response,
 } from "express";
 import ITask from "../interfaces/tasks.model";
-import asyncWrapper from "../middlewares/async";
 // import HTTPError from "../middlewares/errorHandler";
-import { Error } from "mongoose";
-import CustomAPIError, { createCustomError } from "../errors/customError";
+import CustomAPIError from "../errors/customError";
+import asyncMiddleware from "../middlewares/asyncMiddleware";
 import Task from "../models/task.schema";
 
-const getAllTasks = asyncWrapper(
+const getAllTasks = asyncMiddleware(
   async (req: Request, res: Response): Promise<void> => {
     const tasks = await Task.find({});
     res.status(200).json({ status: "All Tasks", length: tasks.length, tasks });
   }
 );
 
-const createTask = asyncWrapper(async (req: Request, res: Response) => {
+const createTask = asyncMiddleware(async (req: Request, res: Response) => {
   const task = await Task.create(req.body);
   res.status(201).json(task);
 });
 
-const getTask = async (req: Request, res: Response, next: NextFunction) => {
-  const { id: taskId } = req.params;
-  try {
+const getTask = asyncMiddleware(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id: taskId } = req.params;
     const task = await Task.findOne({ _id: taskId });
     if (!task) {
-      return res.status(404).json({ msg: "No task found with ID :" + taskId });
+      let error = new CustomAPIError(
+        404,
+        "No associated task with id :" + taskId
+      );
+      return next(error);
+      // return next(new CustomAPIError(404, "No associated task " + taskId));
     }
     res.status(200).json({ msg: "Single Task", task });
-  } catch (error: any) {
-    res.status(404).json({ eRR: error?.message });
   }
-};
+);
 
 const deleteTask = async (req: Request, res: Response) => {
   try {
