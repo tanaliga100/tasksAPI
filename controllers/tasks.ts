@@ -1,3 +1,4 @@
+import { log } from "console";
 import express, {
   ErrorRequestHandler,
   Express,
@@ -5,37 +6,59 @@ import express, {
   Request,
   Response,
 } from "express";
-import ITask from "../interfaces/tasks.model";
-// import HTTPError from "../middlewares/errorHandler";
-import CustomAPIError from "../errors/customError";
-import asyncMiddleware from "../middlewares/asyncMiddleware";
+import CustomAPIError, { createCustomError } from "../errors/customErrorClass";
+import ITask, { IError } from "../interfaces/tasks.model";
+import { asyncMiddleware, catchAsync } from "../middlewares/asyncMiddleware";
 import Task from "../models/task.schema";
 
-const getAllTasks = asyncMiddleware(
-  async (req: Request, res: Response): Promise<void> => {
+const getAllTasks = async (req: Request, res: Response) => {
+  try {
     const tasks = await Task.find({});
     res.status(200).json({ status: "All Tasks", length: tasks.length, tasks });
+  } catch (error) {
+    res.status(500).json({ msg: error });
   }
-);
+};
 
-const createTask = asyncMiddleware(async (req: Request, res: Response) => {
+// const createTask = async (req: Request, res: Response) => {
+//   try {
+//     const task = await Task.create(req.body);
+//     res.status(201).json(task);
+//   } catch (error) {
+//     res.status(500).json({ msg: error });
+//   }
+// };
+const createTask = catchAsync(async (req: Request, res: Response) => {
   const task = await Task.create(req.body);
   res.status(201).json(task);
 });
+
+// const getTask = async (req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     const { id: taskId } = req.params;
+//     const task = await Task.findOne({ _id: taskId });
+//     if (!task) {
+//       return res
+//         .status(404)
+//         .json({ msg: `No such task found ${taskId}`, status: 404 });
+//     }
+//     return res.status(200).json({ msg: "Single Task", task });
+//   } catch (error) {
+//     return next(error);
+//   }
+// };
 
 const getTask = asyncMiddleware(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id: taskId } = req.params;
     const task = await Task.findOne({ _id: taskId });
     if (!task) {
-      return next(
-        new CustomAPIError(404, `No associated task with id : ${taskId}`)
-      );
+      const error = new CustomAPIError(404, `Task ${taskId} not found`);
+      return next(error);
     }
-    res.status(200).json({ msg: "Single Task", task });
+    return res.status(200).json({ msg: "Single Task", task });
   }
 );
-
 const deleteTask = async (req: Request, res: Response) => {
   try {
     const { id: taskId } = req.params;

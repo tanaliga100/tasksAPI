@@ -40,24 +40,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateTask = exports.getTask = exports.getAllTasks = exports.deleteTask = exports.createTask = void 0;
-// import HTTPError from "../middlewares/errorHandler";
-var customError_1 = __importDefault(require("../errors/customError"));
-var asyncMiddleware_1 = __importDefault(require("../middlewares/asyncMiddleware"));
+var customErrorClass_1 = __importDefault(require("../errors/customErrorClass"));
+var asyncMiddleware_1 = require("../middlewares/asyncMiddleware");
 var task_schema_1 = __importDefault(require("../models/task.schema"));
-var getAllTasks = (0, asyncMiddleware_1.default)(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var tasks;
+var getAllTasks = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var tasks, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, task_schema_1.default.find({})];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, task_schema_1.default.find({})];
             case 1:
                 tasks = _a.sent();
                 res.status(200).json({ status: "All Tasks", length: tasks.length, tasks: tasks });
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                res.status(500).json({ msg: error_1 });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
-}); });
+}); };
 exports.getAllTasks = getAllTasks;
-var createTask = (0, asyncMiddleware_1.default)(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+// const createTask = async (req: Request, res: Response) => {
+//   try {
+//     const task = await Task.create(req.body);
+//     res.status(201).json(task);
+//   } catch (error) {
+//     res.status(500).json({ msg: error });
+//   }
+// };
+var createTask = (0, asyncMiddleware_1.catchAsync)(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var task;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -70,8 +84,22 @@ var createTask = (0, asyncMiddleware_1.default)(function (req, res) { return __a
     });
 }); });
 exports.createTask = createTask;
-var getTask = (0, asyncMiddleware_1.default)(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task;
+// const getTask = async (req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     const { id: taskId } = req.params;
+//     const task = await Task.findOne({ _id: taskId });
+//     if (!task) {
+//       return res
+//         .status(404)
+//         .json({ msg: `No such task found ${taskId}`, status: 404 });
+//     }
+//     return res.status(200).json({ msg: "Single Task", task });
+//   } catch (error) {
+//     return next(error);
+//   }
+// };
+var getTask = (0, asyncMiddleware_1.asyncMiddleware)(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var taskId, task, error;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -80,16 +108,16 @@ var getTask = (0, asyncMiddleware_1.default)(function (req, res, next) { return 
             case 1:
                 task = _a.sent();
                 if (!task) {
-                    return [2 /*return*/, next(new customError_1.default(404, "No associated task with id : ".concat(taskId)))];
+                    error = new customErrorClass_1.default(404, "Task ".concat(taskId, " not found"));
+                    return [2 /*return*/, next(error)];
                 }
-                res.status(200).json({ msg: "Single Task", task: task });
-                return [2 /*return*/];
+                return [2 /*return*/, res.status(200).json({ msg: "Single Task", task: task })];
         }
     });
 }); });
 exports.getTask = getTask;
 var deleteTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task, newTask, error_1;
+    var taskId, task, newTask, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -107,8 +135,8 @@ var deleteTask = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.status(200).json({ msg: "Task Deleted successfully", newTask: newTask });
                 return [3 /*break*/, 4];
             case 3:
-                error_1 = _a.sent();
-                res.status(404).json({ msg: error_1 });
+                error_2 = _a.sent();
+                res.status(404).json({ msg: error_2 });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -116,7 +144,7 @@ var deleteTask = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 exports.deleteTask = deleteTask;
 var updateTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task, error_2;
+    var taskId, task, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -134,8 +162,8 @@ var updateTask = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.status(200).json({ msg: "Task Updated", task: task });
                 return [3 /*break*/, 3];
             case 2:
-                error_2 = _a.sent();
-                res.status(404).json({ msg: error_2 });
+                error_3 = _a.sent();
+                res.status(404).json({ msg: error_3 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

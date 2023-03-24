@@ -35,21 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorHandler = void 0;
-var customError_1 = __importDefault(require("../errors/customError"));
 var errorHandler = function (err, req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        if (err instanceof customError_1.default) {
-            console.log(err);
-            // custom error handler...
-            return [2 /*return*/, res.status(err.status).json({ error: err.message })];
-        }
-        // generic error...
-        return [2 /*return*/, res.status(500).json({ error: "Internal server error" })];
+        return [2 /*return*/, res.status(500).json({ Message: err.message, Status: err.status })];
     });
 }); };
 exports.errorHandler = errorHandler;

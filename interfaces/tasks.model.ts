@@ -6,3 +6,8 @@ interface ITask {
 }
 
 export default ITask;
+
+export interface IError {
+  message: string;
+  status: number;
+}

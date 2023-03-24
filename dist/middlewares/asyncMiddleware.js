@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.catchAsync = exports.asyncMiddleware = void 0;
 var asyncMiddleware = function (fn) {
     return function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var error_1;
@@ -49,18 +50,17 @@ var asyncMiddleware = function (fn) {
                     return [3 /*break*/, 3];
                 case 2:
                     error_1 = _a.sent();
-                    next(error_1);
+                    next(error_1); // this would be the blueprint of the CustomAPIError
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); };
 };
-exports.default = asyncMiddleware;
-// import { NextFunction, Request, Response } from "express";
-// import CustomAPIError from "../errors/customError";
-// const asyncMiddleware =
-//   (fn: any) => (req: Request, res: Response, next: any) => {
-//     Promise.resolve(fn(req, res, next)).catch(next);
-//   };
-// export default asyncMiddleware;
+exports.asyncMiddleware = asyncMiddleware;
+var catchAsync = function (fn) {
+    return function (req, res, next) {
+        Promise.resolve(fn(req, res, next)).catch(function (err) { return next(err); });
+    };
+};
+exports.catchAsync = catchAsync;
