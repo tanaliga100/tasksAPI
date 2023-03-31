@@ -1,11 +1,9 @@
 import dotenv from "dotenv";
-import express, { Express, NextFunction, Request, Response } from "express";
+import express, { Express } from "express";
 import morgan from "morgan";
 import path from "path";
 import { connectDB } from "./config/connect";
-import CustomAPIError from "./errors/customErrorClass";
 import { errorHandlerMiddleware } from "./middlewares/errorHandlerMiddleware";
-import { notFoundMiddleware } from "./middlewares/notFoundMiddleware";
 import { tasksRoute } from "./routers/tasks";
 dotenv.config();
 
@@ -29,7 +27,7 @@ app.use(errorHandlerMiddleware);
 const start = async (port: any) => {
   try {
     await connectDB(process.env.MONGO_URI);
-    await app.listen(port, () =>
+    app.listen(port, () =>
       console.log("DB ESTABLISHED && LISTENING => " + port)
     );
   } catch (error: any) {

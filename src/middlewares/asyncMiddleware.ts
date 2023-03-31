@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import CustomAPIError from "../errors/customErrorClass";
 
 export const asyncMiddleware = (fn: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {

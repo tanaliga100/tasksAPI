@@ -1,13 +1,6 @@
-import { log } from "console";
-import express, {
-  ErrorRequestHandler,
-  Express,
-  NextFunction,
-  Request,
-  Response,
-} from "express";
-import CustomAPIError, { createCustomError } from "../errors/customErrorClass";
-import ITask, { IError } from "../interfaces/tasks.model";
+import { NextFunction, Request, Response } from "express";
+import CustomAPIError from "../errors/customErrorClass";
+import ITask from "../interfaces/tasks.model";
 import { asyncMiddleware, catchAsync } from "../middlewares/asyncMiddleware";
 import Task from "../models/task.schema";
 

@@ -62,21 +62,19 @@ var start = function (port) { return __awaiter(void 0, void 0, void 0, function 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, (0, connect_1.connectDB)(process.env.MONGO_URI)];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, app.listen(port, function () {
-                        return console.log("DB ESTABLISHED && LISTENING => " + port);
-                    })];
+                app.listen(port, function () {
+                    return console.log("DB ESTABLISHED && LISTENING => " + port);
+                });
+                return [3 /*break*/, 3];
             case 2:
-                _a.sent();
-                return [3 /*break*/, 4];
-            case 3:
                 error_1 = _a.sent();
                 console.log(error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
