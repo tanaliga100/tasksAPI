@@ -10,6 +10,7 @@ const showTasks = async () => {
     const {
       data: { tasks: tasks },
     } = await axios.get("/api/v1/tasks");
+    console.log("ALL TASKS");
     if (tasks.length < 1) {
       tasksDOM.innerHTML = '<h5 class="empty-list">No tasks in your list</h5>';
       loadingDOM.style.visibility = "hidden";
@@ -17,26 +18,33 @@ const showTasks = async () => {
     }
     const allTasks = tasks
       .map((task) => {
-        console.log({ task });
-        const { completed, _id: taskID, name } = task;
+        const { completed, _id: taskID, title, createdAt } = task;
         return `<div class="single-task ${completed && "task-completed"}">
-<h5><span><i class="far fa-check-circle"></i></span>${name}</h5>
-<div class="task-links">
-
-<!-- edit link -->
-<a href="task.html?id=${taskID}"  class="edit-link">
-<i class="fas fa-edit"></i>
-</a>
-<!-- delete btn -->
-<button type="button" class="delete-btn" data-id="${taskID}">
-<i class="fas fa-trash"></i>
-</button>
-</div>
+        <section class="right">
+        <h5><i class="far fa-check-circle"></i>${title}
+        </h5>
+        <section>
+        <div class="task-links">
+        <!-- edit link -->
+        <a href="task.html?id=${taskID}"  class="edit-link">
+        <i class="fas fa-edit"></i>
+        </a>
+        <!-- delete btn -->
+        <button type="button" class="delete-btn" data-id="${taskID}">
+        <i class="fas fa-trash"></i>
+        </button>
+        </div>
+        </section>
+        </section>
+          <section>
+        <small>${createdAt}</small>
+        </section>
 </div>`;
       })
       .join("");
     tasksDOM.innerHTML = allTasks;
   } catch (error) {
+    console.log("SHOW_TASKS", error);
     tasksDOM.innerHTML =
       '<h5 class="empty-list">There was an error, please try later....</h5>';
   }
@@ -60,19 +68,18 @@ tasksDOM.addEventListener("click", async (e) => {
   loadingDOM.style.visibility = "hidden";
 });
 // form
-
 formDOM.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const name = taskInputDOM.value;
-
+  const title = taskInputDOM.value;
   try {
-    await axios.post("/api/v1/tasks", { name });
+    await axios.post("/api/v1/tasks/", { title });
     showTasks();
     taskInputDOM.value = "";
     formAlertDOM.style.display = "block";
     formAlertDOM.textContent = `success, task added`;
     formAlertDOM.classList.add("text-success");
   } catch (error) {
+    console.log("CREATING TASK ERROR: ", error);
     formAlertDOM.style.display = "block";
     formAlertDOM.innerHTML = `error, please try again`;
   }

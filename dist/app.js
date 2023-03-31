@@ -45,6 +45,7 @@ var morgan_1 = __importDefault(require("morgan"));
 var path_1 = __importDefault(require("path"));
 var connect_1 = require("./config/connect");
 var errorHandlerMiddleware_1 = require("./middlewares/errorHandlerMiddleware");
+var notFoundMiddleware_1 = require("./middlewares/notFoundMiddleware");
 var tasks_1 = require("./routers/tasks");
 dotenv_1.default.config();
 var app = (0, express_1.default)();
@@ -53,9 +54,7 @@ app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)("tiny"));
 app.use("/api/v1/tasks", tasks_1.tasksRoute);
-app.use(function (req, res, next) {
-    res.status(404).send("\n    <h1>Route Does not Found !</h1>\n    <a href=\"/\">Go Back</a>\n    ");
-});
+app.use(notFoundMiddleware_1.notFoundMiddleware);
 app.use(errorHandlerMiddleware_1.errorHandlerMiddleware);
 var start = function (port) { return __awaiter(void 0, void 0, void 0, function () {
     var error_1;

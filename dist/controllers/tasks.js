@@ -39,67 +39,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTask = exports.getTask = exports.getAllTasks = exports.deleteTask = exports.createTask = void 0;
-var customErrorClass_1 = __importDefault(require("../errors/customErrorClass"));
+exports.UPDATE_TASK = exports.GET_TASK = exports.DELETE_TASK = exports.CREATE_TASK = exports.ALL_TASKS = void 0;
+var badRequest_error_1 = __importDefault(require("../errors/badRequest-error"));
+var notFound_error_1 = __importDefault(require("../errors/notFound-error"));
 var asyncMiddleware_1 = require("../middlewares/asyncMiddleware");
 var task_schema_1 = __importDefault(require("../models/task.schema"));
-var getAllTasks = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var tasks, error_1;
+var ALL_TASKS = (0, asyncMiddleware_1.asyncMiddleware)(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var tasks;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, task_schema_1.default.find({})];
+            case 1:
+                tasks = _a.sent();
+                if (!tasks) {
+                    throw new notFound_error_1.default("No tasks found...Please create one", 404);
+                }
+                return [2 /*return*/, res
+                        .status(200)
+                        .json({ msg: "ALL_TASKS", length: tasks.length, tasks: tasks })];
+        }
+    });
+}); });
+exports.ALL_TASKS = ALL_TASKS;
+var CREATE_TASK = (0, asyncMiddleware_1.asyncMiddleware)(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var title, task;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, task_schema_1.default.find({})];
-            case 1:
-                tasks = _a.sent();
-                res.status(200).json({ status: "All Tasks", length: tasks.length, tasks: tasks });
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                res.status(500).json({ msg: error_1 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.getAllTasks = getAllTasks;
-// const createTask = async (req: Request, res: Response) => {
-//   try {
-//     const task = await Task.create(req.body);
-//     res.status(201).json(task);
-//   } catch (error) {
-//     res.status(500).json({ msg: error });
-//   }
-// };
-var createTask = (0, asyncMiddleware_1.catchAsync)(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var task;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, task_schema_1.default.create(req.body)];
+                title = req.body.title;
+                if (!title) {
+                    throw new badRequest_error_1.default("No task provided...Please create one", 404);
+                }
+                return [4 /*yield*/, task_schema_1.default.create(req.body)];
             case 1:
                 task = _a.sent();
-                res.status(201).json(task);
+                res.status(201).json({ msg: "TASK_CREATED", task: task });
                 return [2 /*return*/];
         }
     });
 }); });
-exports.createTask = createTask;
-// const getTask = async (req: Request, res: Response, next: NextFunction) => {
-//   try {
-//     const { id: taskId } = req.params;
-//     const task = await Task.findOne({ _id: taskId });
-//     if (!task) {
-//       return res
-//         .status(404)
-//         .json({ msg: `No such task found ${taskId}`, status: 404 });
-//     }
-//     return res.status(200).json({ msg: "Single Task", task });
-//   } catch (error) {
-//     return next(error);
-//   }
-// };
-var getTask = (0, asyncMiddleware_1.asyncMiddleware)(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task, error;
+exports.CREATE_TASK = CREATE_TASK;
+var GET_TASK = (0, asyncMiddleware_1.asyncMiddleware)(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var taskId, task;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -107,21 +88,16 @@ var getTask = (0, asyncMiddleware_1.asyncMiddleware)(function (req, res, next) {
                 return [4 /*yield*/, task_schema_1.default.findOne({ _id: taskId })];
             case 1:
                 task = _a.sent();
-                if (!task) {
-                    error = new customErrorClass_1.default(404, "Task ".concat(taskId, " not found"));
-                    return [2 /*return*/, next(error)];
-                }
                 return [2 /*return*/, res.status(200).json({ msg: "Single Task", task: task })];
         }
     });
 }); });
-exports.getTask = getTask;
-var deleteTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task, newTask, error_2;
+exports.GET_TASK = GET_TASK;
+var DELETE_TASK = (0, asyncMiddleware_1.asyncMiddleware)(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var taskId, task, newTask;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
                 taskId = req.params.id;
                 return [4 /*yield*/, task_schema_1.default.findOneAndDelete({ _id: taskId })];
             case 1:
@@ -133,22 +109,16 @@ var deleteTask = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 2:
                 newTask = _a.sent();
                 res.status(200).json({ msg: "Task Deleted successfully", newTask: newTask });
-                return [3 /*break*/, 4];
-            case 3:
-                error_2 = _a.sent();
-                res.status(404).json({ msg: error_2 });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [2 /*return*/];
         }
     });
-}); };
-exports.deleteTask = deleteTask;
-var updateTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var taskId, task, error_3;
+}); });
+exports.DELETE_TASK = DELETE_TASK;
+var UPDATE_TASK = (0, asyncMiddleware_1.asyncMiddleware)(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var taskId, task;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
                 taskId = req.params.id;
                 return [4 /*yield*/, task_schema_1.default.findOneAndUpdate({ _id: taskId }, req.body, {
                         new: true,
@@ -160,18 +130,8 @@ var updateTask = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                     return [2 /*return*/, res.status(404).json({ msg: "No Task with ID: " + taskId })];
                 }
                 res.status(200).json({ msg: "Task Updated", task: task });
-                return [3 /*break*/, 3];
-            case 2:
-                error_3 = _a.sent();
-                res.status(404).json({ msg: error_3 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [2 /*return*/];
         }
     });
-}); };
-exports.updateTask = updateTask;
-var Tasks = [];
-// this will trigger an error if exact length but not exact value
-// return res.status(500).json({ msg: "Exact Id but not exact value" });
-// return next(createCustomError("Exact Id but not exact value", 404));
-// return next("has error");
+}); });
+exports.UPDATE_TASK = UPDATE_TASK;

@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Error } from "mongoose";
-import CustomAPIError from "../errors/customErrorClass";
-import { IError } from "../interfaces/tasks.model";
+import CustomAPIError from "../errors/custom-error";
 
 export const errorHandlerMiddleware = (
   error: any,
@@ -9,16 +7,21 @@ export const errorHandlerMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log({ error });
-
-  // if (error instanceof CustomAPIError) {
-  //   return res.status(error.status).send({
-  //     msg: error.message,
-  //     status: error.status,
-  //     isCustomError: error instanceof CustomAPIError,
-  //   });
-  // }
-  res
-    .status(error.status || 501)
-    .json({ msg: error.message || "Something went wrong..CAST ERROR" });
+  console.log(
+    error instanceof CustomAPIError ? "CUSTOM_ERROR" : "FALLBACK_ERROR"
+  );
+  let customError = {
+    message: error.message || "Something went wrong",
+    statusCode: error.statusCode || 404,
+  };
+  if (error instanceof CustomAPIError) {
+    return res
+      .status(customError.statusCode)
+      .json({ msg: customError.message, status: customError.statusCode });
+  }
+  return res.status(400).json({ msg: "Something went wrong" });
+  return res.status(customError.statusCode).json({
+    errorMessage: customError.message,
+    errorStatus: customError.statusCode,
+  });
 };

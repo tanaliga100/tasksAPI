@@ -4,6 +4,7 @@ import morgan from "morgan";
 import path from "path";
 import { connectDB } from "./config/connect";
 import { errorHandlerMiddleware } from "./middlewares/errorHandlerMiddleware";
+import { notFoundMiddleware } from "./middlewares/notFoundMiddleware";
 import { tasksRoute } from "./routers/tasks";
 dotenv.config();
 
@@ -14,14 +15,8 @@ app.use(express.json());
 app.use(morgan("tiny"));
 
 app.use("/api/v1/tasks", tasksRoute);
-app.use(
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.status(404).send(`
-    <h1>Route Does not Found !</h1>
-    <a href="/">Go Back</a>
-    `);
-  }
-);
+
+app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
 const start = async (port: any) => {

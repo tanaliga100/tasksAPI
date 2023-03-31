@@ -374,14 +374,17 @@ form > :last-child {
   gap: 1rem;
 }
 .single-task {
-  padding: 1rem 2.5rem;
+  padding: 1rem 0.3rem;
   background: var(--white);
   border-radius: var(--borderRadius);
   box-shadow: var(--shadow-2);
   transition: var(--transition);
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
+}
+.single-task-title {
+  text-align: left;
 }
 .single-task:hover {
   box-shadow: var(--shadow-4);
@@ -390,10 +393,8 @@ form > :last-child {
   margin-bottom: 0;
 }
 .single-task span {
-  display: inline-block;
   width: 0.5rem;
   height: 0.5rem;
-  margin-left: -1.25rem;
   margin-right: 1.5rem;
 }
 .single-task .fa-check-circle {
@@ -475,4 +476,9 @@ form > :last-child {
 .single-task-form .form-alert {
   text-align: center;
   margin-top: 1rem;
+}
+.right {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
