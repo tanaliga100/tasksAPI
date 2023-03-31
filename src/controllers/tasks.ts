@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import BadRequestError from "../errors/badRequest-error";
 import NotFoundError from "../errors/notFound-error";
 import { asyncMiddleware } from "../middlewares/asyncMiddleware";
 import Task from "../models/task.schema";
@@ -10,9 +9,19 @@ const ALL_TASKS = asyncMiddleware(
     if (!tasks) {
       throw new NotFoundError("No tasks found...Please create one", 404);
     }
-    return res
+    const formattedTasks = tasks.map((task: any) => {
+      const date = task.createdAt;
+      const formattedDate = `${date.getFullYear()}-${
+        date.getMonth() + 1
+      }-${date.getDate()}`;
+      return {
+        ...task._doc,
+        createdAt: formattedDate,
+      };
+    });
+    res
       .status(200)
-      .json({ msg: "ALL_TASKS", length: tasks.length, tasks });
+      .json({ msg: "ALL_TASKS", length: tasks.length, tasks: formattedTasks });
   }
 );
 
@@ -20,10 +29,10 @@ const CREATE_TASK = asyncMiddleware(
   async (req: Request, res: Response, next: NextFunction) => {
     const { title } = req.body;
     if (!title) {
-      throw new BadRequestError("No task provided...Please create one", 404);
+      throw new NotFoundError("No task provided...Please create one", 404);
     }
     const task = await Task.create(req.body);
-    res.status(201).json({ msg: "TASK_CREATED", task });
+    return res.status(201).json({ msg: "TASK_CREATED", task });
   }
 );
 

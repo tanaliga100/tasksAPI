@@ -5,7 +5,7 @@ export const asyncMiddleware = (fn: Function) => {
     try {
       await fn(req, res, next);
     } catch (error) {
-      return next(error); // this would be the blueprint of the CustomAPIError
+      next(error); // this would be the blueprint of the CustomAPIError
     }
   };
 };

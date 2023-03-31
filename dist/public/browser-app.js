@@ -10,7 +10,6 @@ const showTasks = async () => {
     const {
       data: { tasks: tasks },
     } = await axios.get("/api/v1/tasks");
-    console.log("ALL TASKS");
     if (tasks.length < 1) {
       tasksDOM.innerHTML = '<h5 class="empty-list">No tasks in your list</h5>';
       loadingDOM.style.visibility = "hidden";
@@ -20,10 +19,9 @@ const showTasks = async () => {
       .map((task) => {
         const { completed, _id: taskID, title, createdAt } = task;
         return `<div class="single-task ${completed && "task-completed"}">
-        <section class="right">
         <h5><i class="far fa-check-circle"></i>${title}
         </h5>
-        <section>
+        <small>${createdAt}</small>
         <div class="task-links">
         <!-- edit link -->
         <a href="task.html?id=${taskID}"  class="edit-link">
@@ -35,9 +33,6 @@ const showTasks = async () => {
         </button>
         </div>
         </section>
-        </section>
-          <section>
-        <small>${createdAt}</small>
         </section>
 </div>`;
       })
@@ -72,16 +67,16 @@ formDOM.addEventListener("submit", async (e) => {
   e.preventDefault();
   const title = taskInputDOM.value;
   try {
-    await axios.post("/api/v1/tasks/", { title });
+    const data = await axios.post("/api/v1/tasks/", { title });
+    console.log(data);
     showTasks();
     taskInputDOM.value = "";
     formAlertDOM.style.display = "block";
     formAlertDOM.textContent = `success, task added`;
     formAlertDOM.classList.add("text-success");
   } catch (error) {
-    console.log("CREATING TASK ERROR: ", error);
     formAlertDOM.style.display = "block";
-    formAlertDOM.innerHTML = `error, please try again`;
+    formAlertDOM.innerHTML = `Please fill the field`;
   }
   setTimeout(() => {
     formAlertDOM.style.display = "none";
